@@ -22,11 +22,6 @@ public class DataManager : MonoBehaviour
 {
     private string _path;
 
-    private void Start()
-    {
-        _path = Application.persistentDataPath + "/UserData.json";
-    }
-
     public UserData JsonLoad()
     {
         var data = new UserData
@@ -56,9 +51,13 @@ public class DataManager : MonoBehaviour
         if (userData == null) throw new ArgumentNullException(nameof(userData));
         
         FileStream fileStream = new FileStream(_path, FileMode.Create);
-        
-        var jsonData = JsonUtility.ToJson(userData);
+        string jsonData = JsonUtility.ToJson(userData);
         byte[] data = Encoding.UTF8.GetBytes(jsonData);
         fileStream.Write(data, 0, jsonData.Length);
+    }
+    
+    private void Start()
+    {
+        _path = Application.persistentDataPath + "/DiceUserData.json";
     }
 }

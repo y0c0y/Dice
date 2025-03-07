@@ -1,11 +1,15 @@
 public class Enums
 {
-    public enum RpsState : int
+    public enum DiceState : int
     {
-        Rock,
-        Paper,
-        Scissors,
-        WrongAnswer,
+        WrongAnswer = 0,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        
     }
     
     public enum Score : int

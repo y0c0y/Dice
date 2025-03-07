@@ -3,10 +3,10 @@ using System;
 [Serializable]
 public class CharacterInfo : UserData
 {
-    private Enums.RpsState _state = Enums.RpsState.WrongAnswer;
+    private Enums.DiceState _state = Enums.DiceState.WrongAnswer;
     private UserData _scores = new();
 
-    public Enums.RpsState State
+    public Enums.DiceState State
     {
         get => _state;
         set => _state = value;

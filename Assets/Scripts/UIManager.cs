@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,52 +20,9 @@ public class UIManager : MonoBehaviour
     
     public RawImage npcImage;
     public RawImage playerImage;
-
-
-    public void ResetImage()
-    {
-        npcImage.texture = null;
-        playerImage.texture = null;
-
-        npcImage.enabled = false;
-        playerImage.enabled = false;
-    }
     
+    public TMP_Dropdown playerDropdown;
     
-    public void SetImage(RawImage image, Enums.RpsState state)
-    {
-        if (!image) { image = GetComponent<RawImage>(); }
-        if(!image.enabled) { image.enabled = true; }
-
-        switch (state)
-        {
-            case Enums.RpsState.Rock:
-                image.texture = rockTexture;
-                break;
-            case Enums.RpsState.Paper:
-                image.texture = paperTexture;
-                break;
-            case Enums.RpsState.Scissors:
-                image.texture = scissorsTexture;
-                break;
-        }
-    }
-
-    public string FindHand(Enums.RpsState state)
-    {
-        switch (state)
-        {
-            case Enums.RpsState.Rock:
-                return TextData.Rock;
-            case Enums.RpsState.Paper:
-                return TextData.Paper;
-            case Enums.RpsState.Scissors:
-                return TextData.Scissors;
-            default:
-                return TextData.WrongString;
-        }
-    }
-
     public void OnClickPlayButton()
     {
         gameManager.Play();
@@ -72,9 +30,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateRecordText(UserData userData)
     {
-        var tmpScore = userData.userScores;
+        int[] tmpScore = userData.userScores;
         recordText.text = $"Win : {tmpScore[0]} Loss : {tmpScore[1]}, Draw : {tmpScore[2]}";
-
     }
 
     public void OnClickQuitButton()
@@ -82,34 +39,22 @@ public class UIManager : MonoBehaviour
         gameManager.Quit();
     }
     
-    public void OnClickRock()
+    public void SetNpcChoice(Enums.DiceState state)
     {
-        SetPlayerChoice(Enums.RpsState.Rock);
+        // SetImage(npcImage,state);
+        gameManager.DicePlay.Npc.State = state;
+        Debug.Log($"NPC : {state}");
     }
 
-    public void OnClickPaper()
+    public void OnValueChanged()
     {
-        SetPlayerChoice(Enums.RpsState.Paper);
-    }
+        Enums.DiceState tmp = (Enums.DiceState)playerDropdown.value;
+        // SetImage(npcImage,tmp);
+        gameManager.DicePlay.Player.State = tmp;
+        Debug.Log($"Player : {tmp}");
 
-    public void OnClickScissors()
-    {
-        SetPlayerChoice(Enums.RpsState.Scissors);
     }
     
-    public void SetNpcChoice(Enums.RpsState state)
-    {
-        SetImage(npcImage,state);
-        gameManager.RpsPlay.Npc.State = state;
-    }
-
-
-    private void SetPlayerChoice(Enums.RpsState state)
-    {
-        SetImage(playerImage,state);
-        gameManager.RpsPlay.Player.State = state;
-    }
-
     public void SetResultText(string text)
     {
         resultText.text = text;
@@ -118,15 +63,6 @@ public class UIManager : MonoBehaviour
     public void playerButtonCanvasOnOff(bool isOn)
     {
         playerButtonCanvas.enabled = isOn;
-    }
-    public void lobbyCanvasOnOff(bool isOn)
-    {
-        lobbyCanvas.enabled = isOn;
-    }
-    public void PlayTextCanvasOnOff(bool isOn)
-    {
-        resultText.text = "";
-        playTextCanvas.enabled = isOn;
     }
 
     public void SetStartCanvas()
@@ -143,5 +79,27 @@ public class UIManager : MonoBehaviour
         lobbyCanvasOnOff(false);
         PlayTextCanvasOnOff(true);
         playerButtonCanvasOnOff(true);
+    }
+    
+    private void lobbyCanvasOnOff(bool isOn)
+    {
+        lobbyCanvas.enabled = isOn;
+    }
+
+    private void PlayTextCanvasOnOff(bool isOn)
+    {
+        resultText.text = "";
+        playTextCanvas.enabled = isOn;
+    }
+    
+    private void ResetImage()
+    {
+        npcImage.texture = null;
+        playerImage.texture = null;
+        
+        playerDropdown.value = 0;
+
+        npcImage.enabled = false;
+        playerImage.enabled = false;
     }
 }
